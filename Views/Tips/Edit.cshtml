@@ -1,0 +1,298 @@
+@model salon_manager.Models.Tip
+@{
+    ViewData["Title"] = "Edit Tip";
+}
+
+<style>
+    .tip-card {
+        max-width: 460px;
+        margin: 2rem auto;
+        border: none;
+        border-radius: 1.25rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+    }
+
+    .tip-card-header {
+        background: linear-gradient(135deg, #b5166d 0%, #e91e8c 100%);
+        padding: 2rem 2rem 1.5rem;
+        color: #fff;
+    }
+
+    .tip-card-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.01em;
+        color: white;
+    }
+
+    .tip-card-header p {
+        margin: 0.25rem 0 0;
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+
+    .tip-card-body {
+        padding: 1.75rem 2rem;
+        background: #fff;
+    }
+
+    .mode-toggle {
+        display: flex;
+        background: #f1f3f5;
+        border-radius: 0.75rem;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .mode-toggle input[type="radio"] {
+        display: none;
+    }
+
+    .mode-toggle label {
+        flex: 1;
+        text-align: center;
+        padding: 0.55rem 1rem;
+        border-radius: 0.6rem;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #6c757d;
+        transition: all 0.2s ease;
+        user-select: none;
+    }
+
+    .dollar-input .input-group-text {
+        background: #f8f9fa;
+        border-right: none;
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .dollar-input .form-control {
+        border-left: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .dollar-input .form-control:focus {
+        box-shadow: none;
+        border-color: #e91e8c;
+    }
+
+    .dollar-input .input-group-text,
+    .dollar-input .form-control {
+        border-color: #dee2e6;
+    }
+
+    .dollar-input .input-group:focus-within .input-group-text,
+    .dollar-input .input-group:focus-within .form-control {
+        border-color: #e91e8c;
+    }
+
+    .tip-result {
+        background: linear-gradient(135deg, #fce4f0 0%, #f8a5d0 100%);
+        border: 2px solid #e91e8c;
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        text-align: center;
+    }
+
+    .tip-result .tip-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #b5166d;
+        margin-bottom: 0.25rem;
+    }
+
+    .tip-result .tip-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #b5166d;
+        line-height: 1;
+    }
+
+    .field-divider {
+        border: none;
+        border-top: 1px solid #f0f0f0;
+        margin: 1.25rem 0;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #b5166d 0%, #e91e8c 100%);
+        border: none;
+        border-radius: 0.75rem;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.75rem;
+        letter-spacing: 0.01em;
+        transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .btn-save:hover {
+        opacity: 0.92;
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        border-radius: 0.75rem;
+        font-weight: 600;
+        padding: 0.75rem;
+        border-color: #dee2e6;
+        color: #6c757d;
+    }
+
+    .btn-cancel:hover {
+        background: #f8f9fa;
+        color: #495057;
+    }
+
+    .form-label-styled {
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #6c757d;
+        margin-bottom: 0.4rem;
+    }
+</style>
+
+<div class="tip-card card">
+    <div class="tip-card-header">
+        <h2>Edit Tip</h2>
+        <p>Update the details for this tip</p>
+    </div>
+    <div class="tip-card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" style="display:none;"></div>
+
+            <!-- Date -->
+            <div class="mb-4">
+                <label class="form-label-styled">Date</label>
+                <input asp-for="Date" type="date" class="form-control" style="border-radius:0.6rem;" />
+                <span asp-validation-for="Date" class="text-danger small"></span>
+            </div>
+
+            <!-- Payment Mode Toggle -->
+            <div class="mb-4">
+                <label class="form-label-styled">Payment Type</label>
+                <div class="mode-toggle">
+                    <input type="radio" name="PaymentMethod" id="payCard" value="Card"
+                           @(Model.PaymentMethod == salon_manager.Models.PaymentMethod.Card ? "checked" : "") />
+                    <input type="radio" name="PaymentMethod" id="payCash" value="Cash"
+                           @(Model.PaymentMethod == salon_manager.Models.PaymentMethod.Cash ? "checked" : "") />
+                    <div class="mode-toggle-labels d-flex w-100 gap-1">
+                        <label for="payCard" class="flex-fill" id="labelCard">Paid with Card</label>
+                        <label for="payCash" class="flex-fill" id="labelCash">Paid with Cash</label>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="field-divider" />
+
+            <!-- Card Fields -->
+            <div id="cardFields">
+                <div class="mb-3 dollar-input">
+                    <label class="form-label-styled">Cash Tip Received</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" name="TipAmount" id="cardTipAmount" class="form-control" step="0.01"
+                               min="0" placeholder="0.00" style="border-radius: 0 0.6rem 0.6rem 0;"
+                               value="@(Model.PaymentMethod == salon_manager.Models.PaymentMethod.Card && Model.TipAmount != 0 ? Model.TipAmount.ToString("F2") : "")" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cash Fields -->
+            <div id="cashFields" style="display:none;">
+                <div class="row g-3 mb-3">
+                    <div class="col-6 dollar-input">
+                        <label class="form-label-styled">Total Cash</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" name="TotalCash" id="totalCash" class="form-control" step="0.01"
+                                   min="0" placeholder="0.00" style="border-radius: 0 0.6rem 0.6rem 0;"
+                                   value="@Model.TotalCash?.ToString("F2")" />
+                        </div>
+                    </div>
+                    <div class="col-6 dollar-input">
+                        <label class="form-label-styled">Service Cost</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" name="ServiceCost" id="serviceCost" class="form-control" step="0.01"
+                                   min="0" placeholder="0.00" style="border-radius: 0 0.6rem 0.6rem 0;"
+                                   value="@Model.ServiceCost?.ToString("F2")" />
+                        </div>
+                    </div>
+                </div>
+                <div class="tip-result mb-1">
+                    <div class="tip-label">Your Tip</div>
+                    <div class="tip-value" id="cashTipPreview">$0.00</div>
+                </div>
+                <input type="hidden" name="TipAmount" id="cashTipAmount" value="0" />
+            </div>
+
+            <hr class="field-divider" />
+
+            <!-- Actions -->
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-save flex-fill text-white">Save Changes</button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-cancel flex-fill text-center">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const cardFields = document.getElementById('cardFields');
+        const cashFields = document.getElementById('cashFields');
+        const radios = document.querySelectorAll('input[name="PaymentMethod"]');
+        const totalCash = document.getElementById('totalCash');
+        const serviceCost = document.getElementById('serviceCost');
+        const cashTipPreview = document.getElementById('cashTipPreview');
+        const cashTipAmount = document.getElementById('cashTipAmount');
+        const cardTipAmount = document.getElementById('cardTipAmount');
+        const labelCard = document.getElementById('labelCard');
+        const labelCash = document.getElementById('labelCash');
+
+        function toggleMode() {
+            const isCash = document.getElementById('payCash').checked;
+            cardFields.style.display = isCash ? 'none' : '';
+            cashFields.style.display = isCash ? '' : 'none';
+            cardTipAmount.disabled = isCash;
+            cashTipAmount.disabled = !isCash;
+
+            labelCard.style.background = isCash ? '' : '#fff';
+            labelCard.style.color = isCash ? '' : '#b5166d';
+            labelCard.style.boxShadow = isCash ? '' : '0 2px 8px rgba(0,0,0,0.1)';
+            labelCash.style.background = isCash ? '#fff' : '';
+            labelCash.style.color = isCash ? '#b5166d' : '';
+            labelCash.style.boxShadow = isCash ? '0 2px 8px rgba(0,0,0,0.1)' : '';
+        }
+
+        function computeCashTip() {
+            const total = parseFloat(totalCash.value) || 0;
+            const cost = parseFloat(serviceCost.value) || 0;
+            const tip = Math.max(0, total - cost);
+            cashTipPreview.textContent = '$' + tip.toFixed(2);
+            cashTipAmount.value = tip.toFixed(2);
+        }
+
+        radios.forEach(r => r.addEventListener('change', toggleMode));
+        totalCash.addEventListener('input', computeCashTip);
+        serviceCost.addEventListener('input', computeCashTip);
+
+        // Initialize preview for cash mode
+        computeCashTip();
+        toggleMode();
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

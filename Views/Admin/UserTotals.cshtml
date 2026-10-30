@@ -1,0 +1,101 @@
+@{
+    ViewData["Title"] = $"{ViewBag.Username}'s Tip Totals";
+    string userId = ViewBag.UserId;
+    int? year = ViewBag.Year;
+    decimal? total = ViewBag.Total;
+    List<int> availableYears = ViewBag.AvailableYears ?? new List<int>();
+    string? chartLabels = ViewBag.ChartLabels;
+    string? chartValues = ViewBag.ChartValues;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>@ViewBag.Username's Tip Totals</h2>
+    <div>
+        <a asp-action="UserTips" asp-route-id="@userId" class="btn btn-outline-secondary">View Tips</a>
+        <a asp-action="Index" class="btn btn-outline-secondary ms-1">Back to Users</a>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">By Year</div>
+            <div class="card-body">
+                <label class="form-label">Year</label>
+                <select id="yearSelect" class="form-select">
+                    <option value="">-- Select Year --</option>
+                    @foreach (var y in availableYears)
+                    {
+                        <option value="@y" selected="@(year == y ? "selected" : null)">@y</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (total.HasValue)
+{
+    <div class="alert alert-success mt-4">
+        <strong>Total tips for @year:</strong> @total.Value.ToString("C")
+    </div>
+
+    <div class="mt-4">
+        <canvas id="tipsChart"></canvas>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById('yearSelect').addEventListener('change', function () {
+            const val = this.value;
+            const base = '@Url.Action("UserTotals", "Admin", new { id = (string)ViewBag.UserId })';
+            if (val) {
+                window.location.href = base + '?year=' + val;
+            } else {
+                window.location.href = base;
+            }
+        });
+    </script>
+
+    @if (total.HasValue)
+    {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const labels = @Html.Raw(chartLabels ?? "[]");
+            const values = @Html.Raw(chartValues ?? "[]");
+
+            new Chart(document.getElementById('tipsChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tips',
+                        data: values,
+                        backgroundColor: 'rgba(13, 110, 253, 0.6)',
+                        borderColor: 'rgba(13, 110, 253, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => '$' + Number(value).toFixed(2)
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => '$' + ctx.parsed.y.toFixed(2)
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    }
+}

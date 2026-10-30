@@ -1,0 +1,99 @@
+@model salon_manager.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+}
+
+<style>
+    .login-card {
+        max-width: 400px;
+        margin: 3rem auto;
+        border: none;
+        border-radius: 1.25rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+    }
+
+    .login-card-header {
+        background: linear-gradient(135deg, #b5166d 0%, #e91e8c 100%);
+        padding: 2rem 2rem 1.5rem;
+        color: #fff;
+    }
+
+    .login-card-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: white;
+    }
+
+    .login-card-header p {
+        margin: 0.25rem 0 0;
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+
+    .login-card-body {
+        padding: 1.75rem 2rem;
+        background: #fff;
+    }
+
+    .form-label-styled {
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #6c757d;
+        margin-bottom: 0.4rem;
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #b5166d 0%, #e91e8c 100%);
+        border: none;
+        border-radius: 0.75rem;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.75rem;
+        transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .btn-login:hover {
+        opacity: 0.92;
+        transform: translateY(-1px);
+    }
+
+    .form-control:focus {
+        border-color: #e91e8c;
+        box-shadow: 0 0 0 0.2rem rgba(233, 30, 140, 0.15);
+    }
+</style>
+
+<div class="login-card card">
+    <div class="login-card-header">
+        <h2>Sign In</h2>
+        <p>Tip Tracker</p>
+    </div>
+    <div class="login-card-body">
+        <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label-styled"></label>
+                <input asp-for="Username" class="form-control" style="border-radius:0.6rem;" autocomplete="username" />
+                <span asp-validation-for="Username" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Password" class="form-label-styled"></label>
+                <input asp-for="Password" class="form-control" style="border-radius:0.6rem;" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-login w-100 text-white">Sign In</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

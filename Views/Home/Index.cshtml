@@ -1,0 +1,70 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row g-4">
+    <div class="col-sm-6 col-lg-3">
+        <a href="/Tips" class="text-decoration-none">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center py-4">
+                    <div class="fs-1 mb-2">💵</div>
+                    <h5 class="card-title mb-1">My Tips</h5>
+                    <p class="card-text text-muted small">View and manage all logged tips</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <a href="/Tips/Create" class="text-decoration-none">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center py-4">
+                    <div class="fs-1 mb-2">➕</div>
+                    <h5 class="card-title mb-1">Log a Tip</h5>
+                    <p class="card-text text-muted small">Record a new tip entry</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <a href="/Tips/Totals" class="text-decoration-none">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center py-4">
+                    <div class="fs-1 mb-2">📊</div>
+                    <h5 class="card-title mb-1">Totals</h5>
+                    <p class="card-text text-muted small">View yearly and monthly totals</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <a href="/Account/ChangePassword" class="text-decoration-none">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center py-4">
+                    <div class="fs-1 mb-2">🔒</div>
+                    <h5 class="card-title mb-1">Change Password</h5>
+                    <p class="card-text text-muted small">Update your account password</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="col-sm-6 col-lg-3">
+            <a href="/Admin" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 border-start border-4" style="border-color: #b5166d !important;">
+                    <div class="card-body text-center py-4">
+                        <div class="fs-1 mb-2">👥</div>
+                        <h5 class="card-title mb-1">Users</h5>
+                        <p class="card-text text-muted small">Manage user accounts</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>

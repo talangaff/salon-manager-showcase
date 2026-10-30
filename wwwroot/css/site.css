@@ -1,0 +1,155 @@
+:root {
+  --pink-primary: #e91e8c;
+  --pink-light: #f8a5d0;
+  --pink-pale: #fce4f0;
+  --pink-dark: #b5166d;
+  --white: #ffffff;
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: var(--white);
+  color: #2c2c2c;
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--pink-primary) !important;
+  border-bottom: 2px solid var(--pink-dark) !important;
+}
+
+.navbar-brand,
+.navbar-brand:hover {
+  color: var(--white) !important;
+  font-weight: 700;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.nav-link:hover {
+  color: var(--white) !important;
+}
+
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-toggler-icon {
+  filter: brightness(0) invert(1);
+}
+
+/* Footer */
+footer {
+  background-color: var(--pink-pale);
+  border-top: 2px solid var(--pink-light) !important;
+  color: var(--pink-dark) !important;
+}
+
+footer a {
+  color: var(--pink-primary);
+}
+
+footer a:hover {
+  color: var(--pink-dark);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--pink-primary);
+  border-color: var(--pink-primary);
+  color: var(--white);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--pink-dark);
+  border-color: var(--pink-dark);
+  color: var(--white);
+}
+
+.btn-secondary {
+  background-color: var(--pink-light);
+  border-color: var(--pink-light);
+  color: #2c2c2c;
+}
+
+.btn-secondary:hover {
+  background-color: #f08ec0;
+  border-color: #f08ec0;
+  color: #2c2c2c;
+}
+
+/* Focus rings */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--pink-primary);
+}
+
+/* Cards */
+.card {
+  border-color: var(--pink-light);
+}
+
+.card-header {
+  background-color: var(--pink-pale);
+  border-bottom-color: var(--pink-light);
+  color: var(--pink-dark);
+  font-weight: 600;
+}
+
+/* Tables */
+.table thead th {
+  background-color: var(--pink-primary);
+  color: var(--white);
+  border-color: var(--pink-dark);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: var(--pink-pale);
+}
+
+/* Links */
+a {
+  color: var(--pink-primary);
+}
+
+a:hover {
+  color: var(--pink-dark);
+}
+
+/* Form controls */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--pink-light);
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/* Page headings */
+h1, h2, h3 {
+  color: var(--pink-dark);
+}

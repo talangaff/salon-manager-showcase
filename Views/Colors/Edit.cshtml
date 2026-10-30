@@ -1,0 +1,242 @@
+@model salon_manager.Models.ClientFormViewModel
+@{
+    ViewData["Title"] = "Edit Client";
+}
+
+<style>
+    .color-card {
+        max-width: 520px;
+        margin: 2rem auto;
+        border: none;
+        border-radius: 1.25rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+    }
+
+    .color-card-header {
+        background: linear-gradient(135deg, #b5166d 0%, #e91e8c 100%);
+        padding: 2rem 2rem 1.5rem;
+        color: #fff;
+    }
+
+    .color-card-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: white;
+    }
+
+    .color-card-header p {
+        margin: 0.25rem 0 0;
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+
+    .color-card-body {
+        padding: 1.75rem 2rem;
+        background: #fff;
+    }
+
+    .form-label-styled {
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #6c757d;
+        margin-bottom: 0.4rem;
+    }
+
+    .field-divider {
+        border: none;
+        border-top: 1px solid #f0f0f0;
+        margin: 1.25rem 0;
+    }
+
+    .color-row {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .color-row .form-control {
+        border-radius: 0.6rem;
+    }
+
+    .btn-remove-color {
+        flex-shrink: 0;
+        border-radius: 0.6rem;
+        border-color: #dee2e6;
+        color: #dc3545;
+        padding: 0.375rem 0.65rem;
+        line-height: 1;
+    }
+
+    .btn-remove-color:hover {
+        background: #fff0f2;
+        border-color: #dc3545;
+    }
+
+    .btn-add-color {
+        border-radius: 0.6rem;
+        border-color: var(--pink-light);
+        color: var(--pink-dark);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .btn-add-color:hover {
+        background: var(--pink-pale);
+        border-color: var(--pink-primary);
+    }
+
+    .btn-add-toner {
+        border-radius: 0.6rem;
+        border-color: #d4c8f7;
+        color: #6f42c1;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .btn-add-toner:hover {
+        background: #f3f0ff;
+        border-color: #6f42c1;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #b5166d 0%, #e91e8c 100%);
+        border: none;
+        border-radius: 0.75rem;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.75rem;
+        letter-spacing: 0.01em;
+        transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .btn-save:hover {
+        opacity: 0.92;
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        border-radius: 0.75rem;
+        font-weight: 600;
+        padding: 0.75rem;
+        border-color: #dee2e6;
+        color: #6c757d;
+    }
+
+    .btn-cancel:hover {
+        background: #f8f9fa;
+        color: #495057;
+    }
+</style>
+
+<div class="color-card card">
+    <div class="color-card-header">
+        <h2>Edit Client</h2>
+        <p>@Model.FirstName @Model.LastName</p>
+    </div>
+    <div class="color-card-body">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-6">
+                    <label class="form-label-styled">First Name</label>
+                    <input asp-for="FirstName" class="form-control" style="border-radius:0.6rem;" placeholder="First" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-6">
+                    <label class="form-label-styled">Last Name</label>
+                    <input asp-for="LastName" class="form-control" style="border-radius:0.6rem;" placeholder="Last" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <hr class="field-divider" />
+
+            <div class="mb-2">
+                <label class="form-label-styled">Colors</label>
+            </div>
+            <div id="colorList">
+                @foreach (var color in Model.Colors)
+                {
+                    <div class="color-row">
+                        <input type="text" name="Colors" value="@color" class="form-control" placeholder="Enter color..." />
+                        <button type="button" class="btn btn-outline-secondary btn-remove-color" onclick="removeColor(this)" aria-label="Remove">&#x2715;</button>
+                    </div>
+                }
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary btn-add-color w-100 mt-1 mb-4" onclick="addColor()">
+                + Add a Color
+            </button>
+
+            <hr class="field-divider" />
+
+            <div class="mb-2">
+                <label class="form-label-styled">Toners</label>
+            </div>
+            <div id="tonerList">
+                @foreach (var toner in Model.Toners)
+                {
+                    <div class="color-row">
+                        <input type="text" name="Toners" value="@toner" class="form-control" placeholder="Enter toner..." />
+                        <button type="button" class="btn btn-outline-secondary btn-remove-color" onclick="removeToner(this)" aria-label="Remove">&#x2715;</button>
+                    </div>
+                }
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary btn-add-toner w-100 mt-1 mb-4" onclick="addToner()">
+                + Add a Toner
+            </button>
+
+            <hr class="field-divider" />
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-save flex-fill text-white">Save Changes</button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-cancel flex-fill text-center">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function addColor() {
+            const row = document.createElement('div');
+            row.className = 'color-row';
+            row.innerHTML = `
+                <input type="text" name="Colors" class="form-control" placeholder="Enter color..." />
+                <button type="button" class="btn btn-outline-secondary btn-remove-color" onclick="removeColor(this)" aria-label="Remove">&#x2715;</button>
+            `;
+            document.getElementById('colorList').appendChild(row);
+            row.querySelector('input').focus();
+        }
+
+        function removeColor(btn) {
+            btn.closest('.color-row').remove();
+        }
+
+        function addToner() {
+            const row = document.createElement('div');
+            row.className = 'color-row';
+            row.innerHTML = `
+                <input type="text" name="Toners" class="form-control" placeholder="Enter toner..." />
+                <button type="button" class="btn btn-outline-secondary btn-remove-color" onclick="removeToner(this)" aria-label="Remove">&#x2715;</button>
+            `;
+            document.getElementById('tonerList').appendChild(row);
+            row.querySelector('input').focus();
+        }
+
+        function removeToner(btn) {
+            btn.closest('.color-row').remove();
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

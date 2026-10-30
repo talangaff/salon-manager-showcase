@@ -1,0 +1,93 @@
+@{
+    ViewData["Title"] = "Tip Totals";
+    int? year = ViewBag.Year;
+    decimal? total = ViewBag.Total;
+    List<int> availableYears = ViewBag.AvailableYears ?? new List<int>();
+    string? chartLabels = ViewBag.ChartLabels;
+    string? chartValues = ViewBag.ChartValues;
+}
+
+<h2>Tip Totals</h2>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">By Year</div>
+            <div class="card-body">
+                <label class="form-label">Year</label>
+                <select id="yearSelect" class="form-select">
+                    <option value="">-- Select Year --</option>
+                    @foreach (var y in availableYears)
+                    {
+                        <option value="@y" selected="@(year == y ? "selected" : null)">@y</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (total.HasValue)
+{
+    <div class="alert alert-success mt-4">
+        <strong>Total tips for @year:</strong> @total.Value.ToString("C")
+    </div>
+
+    <div class="mt-4">
+        <canvas id="tipsChart"></canvas>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById('yearSelect').addEventListener('change', function () {
+            const val = this.value;
+            if (val) {
+                window.location.href = '@Url.Action("Totals", "Tips")?year=' + val;
+            } else {
+                window.location.href = '@Url.Action("Totals", "Tips")';
+            }
+        });
+    </script>
+
+    @if (total.HasValue)
+    {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const labels = @Html.Raw(chartLabels ?? "[]");
+            const values = @Html.Raw(chartValues ?? "[]");
+
+            new Chart(document.getElementById('tipsChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tips',
+                        data: values,
+                        backgroundColor: 'rgba(13, 110, 253, 0.6)',
+                        borderColor: 'rgba(13, 110, 253, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => '$' + Number(value).toFixed(2)
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => '$' + ctx.parsed.y.toFixed(2)
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    }
+}
